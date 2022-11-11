@@ -12,6 +12,10 @@ Online store project
 <br/>
 <a href="/login">Login</a><br/>
 <a href="/registration">Register</a><br/>
+<form action="/logout" method="post">
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
+    <input type="submit" value="Logout">
+</form>
 <#list products as product>
     <div>
         <p><b>${product.title}</b> ${product.price} | <a href="/product/${product.id}"> Details </a></p>
