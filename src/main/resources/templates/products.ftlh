@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>eCommerce</title>
+</head>
+<body>
+<form method="post" action="/">
+    Search by title - <input type="text" name="title">
+    <input type="submit" value="Search">
+</form>
+Online store project
+<br/>
+<a href="/login">Login</a><br/>
+<a href="/registration">Register</a><br/>
+<#list products as product>
+    <div>
+        <p><b>${product.title}</b> ${product.price} | <a href="/product/${product.id}"> Details </a></p>
+    </div>
+    <#else>
+    <h3> Products not found </h3>
+</#list>
+<hr>
+<form action="/product/create" method="post" enctype="multipart/form-data">
+    Enter title: <input type="text" name="title"/><br/>
+    Enter name: <input type="text" name="author"/><br/>
+    Enter city: <input type="text" name="city"/><br/>
+    Enter description: <input type="text" name="description"/><br/>
+    Enter price: <input type="number" name="price"/><br/>
+    First image (Preview) : <input type="file" name="file1"/><br/>
+    Second image: <input type="file" name="file2"/><br/>
+    Third image: <input type="file" name="file3"/><br/>
+    <input type="submit" value="Submit"/>
+<#--    TODO// labels -->
+</form>
+</body>
+</html>
