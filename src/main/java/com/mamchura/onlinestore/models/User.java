@@ -110,6 +110,10 @@ public class User {
         this.active = active;
     }
 
+    public boolean isAdmin() {
+        return roles.contains(Role.ROLE_ADMIN);
+    }
+
 //    public Image getImage() {
 //        return image;
 //    }

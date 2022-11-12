@@ -13,7 +13,7 @@
     <input id="email" type="email" name="email"/>
 
     <label for="phone">Enter your phone number: </label>
-    <input id="phone" type="text" name="phone"/>
+    <input id="phone" type="text" name="phoneNumber"/>
 
     <label for="password">Enter your password: </label>
     <input id="password" type="password" name="password"/><br/>

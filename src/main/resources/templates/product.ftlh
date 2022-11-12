@@ -10,13 +10,13 @@
     <img src="/images/${image.id}" height="60px"/>
 </#list>
 <hr>
-<p align="center"><b>Author: </b>${product.user.name}</p>
-<br/>
 <p align="center"><b>City: </b>${product.city}</p>
 <br/>
 <p align="center"><b>Description: </b>${product.description}</p>
 <br/>
 <p align="center"><b>Price: </b>${product.price}</p>
+<br/>
+<p align="center"><b>Author: </b> <a href="/user/${product.user.id}">${product.user.name} </a> </p>
 <br/>
 <div align="center">
 <form action="/product/${product.id}" method="post">

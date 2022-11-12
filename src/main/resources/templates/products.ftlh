@@ -16,6 +16,9 @@ Online store project
         <input type="hidden" name="_csrf" value="${_csrf.token}">
         <input type="submit" value="Logout">
     </form>
+    <#if user.isAdmin()>
+        <a href="/admin">Admin Panel</a>
+    </#if>
 <#else>
     <a href="/login">Login</a><br/>
     <a href="/registration">Register</a><br/>
