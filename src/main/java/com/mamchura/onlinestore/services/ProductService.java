@@ -2,26 +2,31 @@ package com.mamchura.onlinestore.services;
 
 import com.mamchura.onlinestore.models.Image;
 import com.mamchura.onlinestore.models.Product;
+import com.mamchura.onlinestore.models.User;
 import com.mamchura.onlinestore.repositories.ProductRepository;
+import com.mamchura.onlinestore.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.security.Principal;
 import java.util.List;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, UserRepository userRepository) {
         this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
 
-    public void save(Product product, MultipartFile file1, MultipartFile file2, MultipartFile file3) throws IOException {
+    public void save(Principal principal, Product product, MultipartFile file1, MultipartFile file2, MultipartFile file3) throws IOException {
+        product.setUser(getUserByPrincipal(principal));
         Image image1, image2, image3;
         if (file1.getSize() != 0) {
             image1 = toImageEntity(file1);
@@ -37,6 +42,7 @@ public class ProductService {
             product.addImage(image3);
         }
         product.setPreviewImageId(product.getImageList().get(0).getId());
+        System.out.println(product);
         productRepository.save(product);
     }
 
@@ -66,5 +72,8 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-
+    public User getUserByPrincipal(Principal principal) {
+        if (principal == null) return new User();
+        return (User) userRepository.findByEmail(principal.getName()).orElse(null);
+    }
 }

@@ -29,6 +29,10 @@ public class Product {
     @Column(name = "price")
     private Integer price;
 
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinColumn
+    private User user;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
     private List<Image> imageList;
     private Integer previewImageId;
@@ -48,6 +52,18 @@ public class Product {
         this.city = city;
         this.description = description;
         this.price = price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void addImage(Image image) {

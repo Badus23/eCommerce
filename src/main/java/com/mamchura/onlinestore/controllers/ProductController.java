@@ -9,22 +9,23 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
-public class ItemsController {
+public class ProductController {
 
     private final ProductService productService;
 
     @Autowired
-    public ItemsController(ProductService productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
     @GetMapping("/")
-    public String products(Model model) {
+    public String products(Model model, @ModelAttribute("product") Product product, Principal principal) {
         model.addAttribute("products", productService.findAll());
+        model.addAttribute("user", productService.getUserByPrincipal(principal));
         return "products";
     }
 
@@ -40,8 +41,9 @@ public class ItemsController {
     public String createProduct(@RequestParam("file1")MultipartFile file1,
                                 @RequestParam("file2")MultipartFile file2,
                                 @RequestParam("file3")MultipartFile file3,
-                                @ModelAttribute("product") Product product) throws IOException {
-        productService.save(product, file1, file2, file3);
+                                @ModelAttribute("product") Product product,
+                                Principal principal) throws IOException {
+        productService.save(principal, product, file1, file2, file3);
         return "redirect:/";
     }
 

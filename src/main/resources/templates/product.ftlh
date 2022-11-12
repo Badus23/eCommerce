@@ -10,7 +10,7 @@
     <img src="/images/${image.id}" height="60px"/>
 </#list>
 <hr>
-<p align="center"><b>Author: </b>${product.author}</p>
+<p align="center"><b>Author: </b>${product.user.name}</p>
 <br/>
 <p align="center"><b>City: </b>${product.city}</p>
 <br/>
