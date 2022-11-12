@@ -16,7 +16,7 @@ Admin Panel
     <a href="/login">Login</a><br/>
     <a href="/registration">Register</a><br/>
 </#if>
-<table>
+<table border="1">
     <tr>
         <th>Email</th>
         <th>Phone Number</th>
@@ -31,11 +31,15 @@ Admin Panel
             <th>${user.email}</th>
             <th>${user.phoneNumber}</th>
             <th><#if user.active> Active <#else> Inactive </#if></th>
-            <th><#list user.roles as role><${role}<#sep>, </#list></th>
+            <th><#list user.roles as role>${role}</#list></th>
             <th>
-                <form action="/user/ban/${user.id}">
+                <form action="/admin/user/ban/${user.id}" method="post">
                     <input type="hidden" name="_csrf" value="${_csrf.token}">
-                    <input type="submit" value="Ban">
+                    <input type="submit"
+                           <#if user.isActive()>value="Ban"
+                           <#else>value="Forgive"
+                            </#if>
+                    />
                 </form>
             </th>
             <th>
@@ -45,7 +49,7 @@ Admin Panel
                 <a href="/user/${user.id}">Details</a>
             </th>
         </tr>
-        <#else>
+    <#else>
         <h3>Users not found</h3>
     </#list>
 </table>
