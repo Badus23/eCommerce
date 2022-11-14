@@ -1,28 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>eCommerce</title>
-</head>
-<body>
-<h3 align="center">Registration</h3>
-<form action="/registration" method="post">
-    <label for="name">Enter your name: </label>
-    <input id="name" type="text" name="name"/>
-
-    <label for="email">Enter your email: </label>
-    <input id="email" type="email" name="email"/>
-
-    <label for="phone">Enter your phone number: </label>
-    <input id="phone" type="text" name="phoneNumber"/>
-
-    <label for="password">Enter your password: </label>
-    <input id="password" type="password" name="password"/><br/>
-
-    <input type="hidden" name="_csrf" value="${_csrf.token}">
-    <input type="submit" value="Register"/>
-</form>
-<#if errorMessage??>
-    <h2 style="color: red">${errorMessage}</h2>
-</#if>
-</body>
-</html>
+<#import "blocks/template.ftlh" as t>
+<@t.template user>
+    <h1 style="text-align: center">Registration</h1>
+    <hr>
+    <form action="/registration" method="post">
+        <div class="form-group">
+            <label for="name">Username</label>
+            <input type="text" class="form-control" required id="name" name="name">
+        </div>
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" class="form-control" id="email" required name="email">
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">Phone number</label>
+            <input type="text" class="form-control" id="phoneNumber" required name="phoneNumber">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" required name="password">
+        </div>
+        <input type="hidden" name="_csrf" value="${_csrf.token}">
+        <button type="submit" style="width: 100%" class="btn btn-dark">Register</button>
+    </form>
+    <#if errorMessage??>
+        <h2 style="color: red">${errorMessage}</h2>
+    </#if>
+</@t.template>

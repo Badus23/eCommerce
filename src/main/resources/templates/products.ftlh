@@ -1,52 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>eCommerce</title>
-</head>
-<body>
-<form method="post" action="/">
-    Search by title - <input type="text" name="title">
-    <input type="submit" value="Search">
-</form>
-Online store project
-<br/>
-<#if user.email??>
-    <h3>Your name: ${user.name}</h3>
-    <form action="/logout" method="post">
-        <input type="hidden" name="_csrf" value="${_csrf.token}">
-        <input type="submit" value="Logout">
+<#import "blocks/template.ftlh" as t>
+<@t.template user>
+    <h1 style="text-align: center">Product search</h1><hr>
+    <form method="get" action="/">
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="searchCity">City</label>
+                <select id="searchCity" class="form-control">
+                    <option value="">Not selected</option>
+                    <option value="Los_Angeles">Los Angeles</option>
+                    <option value="Dallas">Dallas</option>
+                    <option value="Washington">Washington</option>
+                    <option value="New-York">New-York</option>
+                    <option value="Las_Vegas">Las Vegas</option>
+                    <option value="Chicago">Chicago</option>
+                </select>
+            </div>
+            <div class="form-group col-md-10">
+                <label for="searchWord">Search by ads</label>
+                <input type="text" name="searchWord" <#if searchWord??>value="${searchWord}"</#if> class="form-control"
+                       id="searchWord">
+            </div>
+            <button style="width: 100%" type="submit" class="btn btn-dark">Search</button>
+        </div>
     </form>
-    <#if user.isAdmin()>
-        <a href="/admin">Admin Panel</a>
-    </#if>
-<#else>
-    <a href="/login">Login</a><br/>
-    <a href="/registration">Register</a><br/>
-</#if>
-<#list products as product>
-    <div>
-        <p><b>${product.title}</b> ${product.price} | <a href="/product/${product.id}"> Details </a></p>
-    </div>
-<#else>
-    <h3> Products not found </h3>
-</#list>
-<#if user.email??>
     <hr>
-<#--TODO Вынести в отдельный файл-->
-    <h3>Create new product</h3>
-    <form action="/product/create" method="post" enctype="multipart/form-data">
-        Enter title: <input type="text" name="title"/><br/>
-        Enter name: <input type="text" name="author"/><br/>
-        Enter city: <input type="text" name="city"/><br/>
-        Enter description: <input type="text" name="description"/><br/>
-        Enter price: <input type="number" name="price"/><br/>
-        First image (Preview) : <input type="file" name="file1"/><br/>
-        Second image: <input type="file" name="file2"/><br/>
-        Third image: <input type="file" name="file3"/><br/>
-        <input type="submit" value="Submit"/>
-        <input type="hidden" name="_csrf" value="${_csrf.token}">
-        <#--    TODO// labels -->
-    </form>
-</#if>
-</body>
-</html>
+    <div class="card-columns">
+        <#list products as product>
+            <a href="/product/${product.id}" class="product-link">
+                <div class="card text-white bg-dark my-3 product">
+                    <img src="/images/${product.previewImageId}"
+                         class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">${product.title}</h5>
+                        <p class="card-text">${product.price}$</p>
+                    </div>
+                    <div class="card-footer">
+                        ${product.city}
+                    </div>
+                </div>
+            </a>
+        <#else>
+            <h1 style="text-align: center">Not found</h1>
+        </#list>
+    </div>
+</@t.template>

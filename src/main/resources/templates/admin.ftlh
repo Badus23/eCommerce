@@ -1,57 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>eCommerce</title>
-</head>
-<body>
-Admin Panel
-<br/>
-<#if user.email??>
-    <h3>Your name: ${user.name}</h3>
-    <form action="/logout" method="post">
-        <input type="hidden" name="_csrf" value="${_csrf.token}">
-        <input type="submit" value="Logout">
-    </form>
-<#else>
-    <a href="/login">Login</a><br/>
-    <a href="/registration">Register</a><br/>
-</#if>
-<table border="1">
-    <tr>
-        <th>Email</th>
-        <th>Phone Number</th>
-        <th>Activity</th>
-        <th>Roles</th>
-        <th>Ban</th>
-        <th>Edit</th>
-        <th>Details</th>
-    </tr>
-    <#list users as user>
+<#import "blocks/template.ftlh" as t>
+<@t.template user>
+    `<h1 style="text-align: center">Admin Panel</h1><hr>
+    <table class="table table-hover table-dark">
         <tr>
-            <th>${user.email}</th>
-            <th>${user.phoneNumber}</th>
-            <th><#if user.active> Active <#else> Inactive </#if></th>
-            <th><#list user.roles as role>${role}</#list></th>
-            <th>
-                <form action="/admin/user/ban/${user.id}" method="post">
-                    <input type="hidden" name="_csrf" value="${_csrf.token}">
-                    <input type="submit"
-                           <#if user.isActive()>value="Ban"
-                           <#else>value="Forgive"
-                            </#if>
-                    />
-                </form>
-            </th>
-            <th>
-                <a href="/admin/user/edit/${user.id}">Edit roles</a>
-            </th>
-            <th>
-                <a href="/user/${user.id}">Details</a>
-            </th>
+            <th scope="col">E-mail</th>
+            <th scope="col">Phone number</th>
+            <th scope="col">Activity</th>
+            <th scope="col">Roles</th>
+            <th scope="col">Command</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Details</th>
         </tr>
-    <#else>
-        <h3>Users not found</h3>
-    </#list>
-</table>
-</body>
-</html>
+        <#list users as user>
+            <tr>
+                <th>${user.email}</th>
+                <th>${user.phoneNumber}</th>
+                <th><#if user.active>true<#else>false</#if></th>
+                <th><#list user.roles as role>${role}</#list></th>
+                <th>
+                    <form action="/admin/user/ban/${user.id}" method="post">
+                        <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        <input type="submit" class="btn btn-light" <#if user.isActive()>value="Ban" <#else>value="Forgive"</#if>>
+                    </form>
+                </th>
+                <th><a href="/admin/user/edit/${user.id}">Edit</a></th>
+                <th><a href="/user/${user.id}">Details</a></th>
+            </tr>
+        <#else>
+            <h3>No users</h3>
+        </#list>
+    </table>
+</@t.template>

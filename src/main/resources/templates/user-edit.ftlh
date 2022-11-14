@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>eCommerce</title>
-</head>
-<body>
-<form action="/admin/user/edit" method="post">
-<#list roles as role>
-    <div>
-        <label><input type="checkbox" name="${role}" ${user.roles?seq_contains(role)?string("checked", "")}/>${role}</label>
-    </div>
-</#list>
-    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-    <input type="hidden" name="userId" value="${user.id}"/>
-    <button type="submit">Save</button>
-</form>
-</body>
-</html>
+<#import "blocks/template.ftlh" as t>
+<@t.template user>
+    <h1 style="text-align: center">Edit ${user.name} profile</h1><hr>
+    <form action="/admin/user/edit" method="post">
+        <#list roles as role>
+            <div>
+                <label><input type="checkbox" name="${role}" ${user.roles?seq_contains(role)?string("checked", "")}>${role}</label>
+            </div>
+        </#list>
+        <input type="hidden" value="${user.id}" name="userId">
+        <input type="hidden" value="${_csrf.token}" name="_csrf">
+        <button type="submit" class="btn btn-dark">Save</button>
+    </form>
+
+</@t.template>

@@ -41,9 +41,12 @@ public class ProductService {
             image3 = toImageEntity(file3);
             product.addImage(image3);
         }
-        product.setPreviewImageId(product.getImageList().get(0).getId());
-        System.out.println(product);
+        Product productFromDb = productRepository.save(product);
+        productFromDb.setPreviewImageId(productFromDb.getImageList().get(0).getId());
         productRepository.save(product);
+//        product.setPreviewImageId(product.getImageList().get(0).getId());
+//        System.out.println(product);
+//        productRepository.save(product);
     }
 
     private Image toImageEntity(MultipartFile file) throws IOException {
@@ -75,5 +78,19 @@ public class ProductService {
     public User getUserByPrincipal(Principal principal) {
         if (principal == null) return new User();
         return (User) userRepository.findByEmail(principal.getName()).orElse(null);
+    }
+
+    public Product getProductById(int id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
+    public void deleteProduct(User user, int id) {
+        Product product = productRepository.findById(id)
+                .orElse(null);
+        if (product != null) {
+            if (product.getUser().getId() == user.getId()) {
+                productRepository.delete(product);
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.mamchura.onlinestore.controllers;
 
 import com.mamchura.onlinestore.models.Product;
+import com.mamchura.onlinestore.models.User;
 import com.mamchura.onlinestore.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,18 +24,21 @@ public class ProductController {
     }
 
     @GetMapping("/")
-    public String products(Model model, @ModelAttribute("product") Product product, Principal principal) {
+    public String products(@RequestParam(name = "searchWord", required = false) String title, Model model, Principal principal) {
         model.addAttribute("products", productService.findAll());
         model.addAttribute("user", productService.getUserByPrincipal(principal));
+        model.addAttribute("searchWord", title);
         return "products";
     }
 
-    @PostMapping("/")
-    public String search(@RequestParam(value = "title", required = false) String title, Model model) {
-        List<Product> productList = productService.findAllByTitle(title);
-        if (title.equals("")) return "redirect:/";
-        model.addAttribute("products", productList);
-        return "products";
+    @GetMapping("product/{id}")
+    public String productInfo(@PathVariable("id") int id, Model model, Principal principal) {
+        Product product = productService.getProductById(id);
+        model.addAttribute("user", productService.getUserByPrincipal(principal));
+        model.addAttribute("product", product);
+        model.addAttribute("images", product.getImageList());
+        model.addAttribute("authorProduct", product.getUser());
+        return "product-info";
     }
 
     @PostMapping(value = "/product/create", headers = "content-type=multipart/*")
@@ -44,23 +48,20 @@ public class ProductController {
                                 @ModelAttribute("product") Product product,
                                 Principal principal) throws IOException {
         productService.save(principal, product, file1, file2, file3);
-        return "redirect:/";
+        return "redirect:/my/products";
     }
 
-    @GetMapping("/product/{id}")
-    public String findProduct(@PathVariable("id") int id, Model model) {
-        Product product = productService.findById(id);
-        if (product == null) {
-            return "nothingHere";
-        }
-        model.addAttribute("product", product);
-        model.addAttribute("images", product.getImageList());
-        return "product";
+    @PostMapping("/product/delete/{id}")
+    public String deleteProduct(@PathVariable("id") int id, Principal principal) {
+        productService.deleteProduct(productService.getUserByPrincipal(principal), id);
+        return "redirect:/my/products";
     }
 
-    @DeleteMapping("/product/{id}")
-    public String deleteProduct(@PathVariable("id") int id) {
-        productService.deleteById(id);
-        return "redirect:/";
+    @GetMapping("/my/products")
+    public String userProducts(Principal principal, Model model) {
+        User user = productService.getUserByPrincipal(principal);
+        model.addAttribute("user", user);
+        model.addAttribute("products", user.getProducts());
+        return "my-products";
     }
 }

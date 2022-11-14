@@ -34,7 +34,7 @@ public class Product {
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
-    private List<Image> imageList;
+    private List<Image> imageList = new ArrayList<>();
     private Integer previewImageId;
     private LocalDateTime localDateTime;
 

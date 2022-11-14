@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -65,5 +66,10 @@ public class UserService {
                 user.getRoles().add(Role.valueOf(key));
         }
         userRepository.save(user);
+    }
+
+    public User getUserByPrincipal(Principal principal) {
+        if (principal == null) return new User();
+        return (User) userRepository.findByEmail(principal.getName()).orElse(null);
     }
 }

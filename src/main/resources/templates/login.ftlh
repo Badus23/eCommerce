@@ -1,18 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>eCommerce</title>
-</head>
-<body>
-<form action="/login" method="post">
-    <label for="email">Enter your email: </label>
-    <input id="email" type="email" name="username"/>
-
-    <label for="password">Enter your password: </label>
-    <input id="password" type="password" name="password"/><br/>
-
-    <input type="hidden" name="_csrf" value="${_csrf.token}">
-    <input type="submit" value="Login"/>
-</form>
-</body>
-</html>
+<#import "blocks/template.ftlh" as t>
+<@t.template user>
+    <h1 style="text-align: center">Login</h1>
+    <hr>
+    <form action="/login " method="post">
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" class="form-control <#if RequestParameters.error??>is-invalid</#if>" id="email" name="username">
+            <div id="email" class="invalid-feedback">
+                Wrong e-mail
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control <#if RequestParameters.error??>is-invalid</#if>" id="password" name="password">
+            <div id="password" class="invalid-feedback">
+                Wrong password
+            </div>
+        </div>
+        <input type="hidden" name="_csrf" value="${_csrf.token}">
+        <button type="submit" style="width: 100%" class="btn btn-dark">Proceed</button>
+    </form>
+    <hr>
+    <h2>Not registered yet? <a href="/registration">Create new account</a></h2>
+</@t.template>
